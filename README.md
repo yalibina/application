@@ -1,3 +1,11 @@
+# Либина Яна - 
+
+### Группа 10-И1
+### Эл.почта - libina.ym@gmail.com
+### Вконтакте - https://vk.com/seadoggo
+### Telegram - @kruigloidd
+
+
 **[ ПРОБЛЕМНОЕ ПОЛЕ ]**
 
 
