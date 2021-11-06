@@ -1,0 +1,1 @@
+web: gunicorn zatascheno.wsgi --log-file -

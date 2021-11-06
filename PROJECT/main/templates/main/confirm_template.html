@@ -1,0 +1,18 @@
+{% extends 'main/index.html' %}
+
+
+{% block content %}
+
+    <header class="bg-dark py-5"></header>
+    <div class="text-center" >
+        <h3 {{ user.first_name }}, вы успешно зарегистрированы!</h3>
+        <a href="{% url 'login' %}"> Войти </a>
+    </div>
+
+
+
+
+
+
+
+{% block content %}

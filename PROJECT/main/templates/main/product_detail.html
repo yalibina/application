@@ -1,0 +1,29 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+
+    <section class="py-5 align-items-center" >
+            <div class="container px-3 px-lg-3 my-3 mt-3 align-items-center">
+                <div class="row gx-2 gx-lg-5">
+                    <div class="col-md-5"><img class="card-img-top mb-5 mb-md-0" src="{{ product.image.url }}" alt="..." /></div>
+                    <div class="col-md-6">
+
+                        <h2 class="display-7 fw-bolder">{{ product.title }}</h2>
+                        <div class="fs-5 mb-3">
+                            <span>{{ product.price }} руб.</span>
+                        </div>
+
+                        <div class="d-flex mb-5" >
+{#                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />#}
+                            <button data-product={{ product.id }} data-action="add" class="btn btn-outline-dark flex-shrink-0 add-btn update-cart" type="button">
+                                <i class="bi-cart-fill me-1"></i>
+                                В корзину
+                            </button>
+                        </div>
+                         <p class="lead align-text-center"> {% filter linebreaksbr %}{{ product.content }}{% endfilter %} </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

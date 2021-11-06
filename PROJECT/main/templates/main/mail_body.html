@@ -1,0 +1,25 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Подтверждение E-mail</title>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#{% autoescape off %}#}
+{#<h1>Вы почти зарегистрированы, {{ user.first_name }}!</h1><br>#}
+{#<h2>Нажмите <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">сюда</a>, чтобы зарегистрироваться</h2>#}
+{#<h2>Срок действия ссылки: {{ expiry|time:"TIME_FORMAT" }}</h2>#}
+{#{% endautoescape %}#}
+{##}
+{#</body>#}
+{#</html>#}
+
+{% autoescape off %}
+Hi {{ user.first_name }},
+
+Please click on the link below to confirm your registration:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}
+
