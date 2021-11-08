@@ -1,0 +1,145 @@
+{% extends 'main/index.html' %}
+{% load static  %}
+{% block content %}
+     <header class="bg-dark py-5" style="width:100%">
+            <div class="container px-4 px-lg-5 my-1">
+                <div class="text-start text-white">
+                    <h2 class="display-5 fw-bolder">Оформление заказа</h2>
+                </div>
+            </div>
+    </header>
+    <div class="row" style="margin: 50px 0px 20px 5%; justify-content: space-around">
+
+		<div class="col-lg-6">
+			<div class="box-element">
+				<form id="form">
+					<div id="user-info">
+                        <h3>Ваши данные</h3>
+						<div class="form-field">
+							<input required class="form-control" type="text" name="name" placeholder="ФИО">
+						</div>
+						<div id = "email_odd" class="form-field" >
+							<input required class="form-control" type="email" name="email" placeholder="Email">
+						</div>
+                        <div class="form-field">
+							<input required class="form-control" type="text" name="phone" placeholder="Номер телефона">
+						</div>
+					</div>
+                    <div>
+                        <div class="form-field">
+                            <hr>
+                            <input class="form-control" type="text" name="details" placeholder="Есть уточнения к заказу?">
+                        </div>
+                    </div>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="К оплате">
+				</form>
+                <br>
+                <h5>После оплаты с вами свяжется менеджер</h5>
+			</div>
+			<br>
+		</div>
+		<div class="col-lg-6">
+			<div class="box-element">
+                <a  class="btn btn-outline-dark" href="/cart">&#x2190; К корзине</a>
+				<hr>
+				<h3>Итог</h3>
+				<hr>
+                {% for item in items %}
+				<div class="cart-row">
+					<div style="flex:1"><img class="row-image" style="width:90%" src="{{item.product.image.url}}"></div>
+					<div style="flex:2; padding-right:5px"><p>{{ item.product.title }}</p></div>
+                    <div class="vr"></div>
+					<div style="flex:1; padding-left:5px; padding-right:5px"><p>{{item.product.price}}</p></div>
+					<div style="flex:1"><p>x{{ item.quantity }}</p></div>
+				</div>
+                {% endfor %}
+				<h5>Товаров: {{ order.get_cart_items }}</h5>
+				<h5>К оплате: {{order.get_cart_total|floatformat:2}} руб.</h5>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	    var form = document.getElementById('form')
+	    this.pay = function () {
+         var widget = new cp.CloudPayments();
+            widget.pay('charge',
+                { //options
+                    publicId: 'test_api_00000000000000000000001', //id из личного кабинета
+                    description: 'Оплата товаров в #Затащено', //назначение
+                    amount: {{order.get_cart_total}}, //сумма
+                    currency: 'RUB', //валюта
+                    accountId: 'user@example.com', //идентификатор плательщика (необязательно)
+                    invoiceId: '1234567', //номер заказа  (необязательно)
+                    skin: 'modern', //дизайн виджета (необязательно)
+                    data: {
+                        name: form.name.value,
+                        phone: form.phone.value,
+                        comment: form.details.value
+                    },
+                    email: form.email.value
+                },
+                {
+                    onSuccess: function (options) { // success
+                            submitFormData()
+                    },
+                    onFail: function (reason, options) { // fail
+                        //действие при неуспешной оплате
+                    },
+                    onComplete: function (paymentResult, options) { //Вызывается как только виджет получает от api.cloudpayments ответ с результатом транзакции.
+                        //например вызов вашей аналитики Facebook Pixel
+                    }
+                }
+            )
+        };
+        document.getElementById('form-button').addEventListener('click', function (e) {
+            pay()
+        })
+	</script>
+
+    <script type="text/javascript">
+
+        var total = {{order.get_cart_total}}
+
+        var form = document.getElementById('form')
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault()
+        })
+
+        function submitFormData() {
+
+            var userFormData = {
+                'name': null,
+                'email':null,
+                'phone': null,
+                'details': null,
+                'total': total
+            }
+
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+            userFormData.phone = form.phone.value
+            userFormData.details = form.details.value
+
+            var url = '/process_order/'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({'form': userFormData})
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                window.location.href = "{% url 'products' %}"
+                cart = {}
+                alert('Оплата выполнена. Менеджер свяжется с вами в ближайшее время. Спасибо за покупку!');
+                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            })
+
+        }
+    </script>
+{% endblock content %}

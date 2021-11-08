@@ -1,0 +1,9 @@
+
+{% autoescape off %}
+Добро пожаловать, {{ user.first_name }}!
+
+Перейдите по этой ссылке, чтобы завершить регистрацию:
+
+https://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}
+

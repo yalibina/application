@@ -1,0 +1,21 @@
+{% extends 'main/index.html' %}
+
+
+{% block content %}
+
+    <header class="bg-dark py-5"></header>
+
+    <div class="container px-4 px-lg-5 my-5">
+        <div class = "text-start" style="height: 100%">
+            <h3>{{ user.first_name }}, вы успешно зарегистрированы!</h3>
+        </div>
+    </div>
+    <div class="container px-4 px-lg-5 my-5" style="padding-bottom: 10%">
+        <div class = "text-start" style="height: 100%">
+            <h3><a href="{% url 'login' %}" style="text-decoration: underline"> Войти </a></h3>
+        </div>
+    </div>
+
+
+
+{% endblock content %}
